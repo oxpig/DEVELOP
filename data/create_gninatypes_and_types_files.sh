@@ -11,7 +11,7 @@ mkdir ${designTask}/gninatypes/${typesName}_pharms
 # Pharmacophoric representations
 python typer.py ${basePath}_starting_structures.sdf ./${designTask}/gninatypes/${typesName}_pharm/${typesName}
 # Starting Fragments 
-python typer.py ${smiInput}_pharmacophores.sdf ./${designTask}/gninatypes/${typesName}_frags/${typesName}
+python typer.py ${basePath}_pharmacophores.sdf ./${designTask}/gninatypes/${typesName}_frags/${typesName}
 
 ## Create Types file
 python createTypesFile.py ./${designTask}/gninatypes/${typesName}_pharm/${typesName} ./${designTask}/gninatypes/${typesName}_frags/${typesName} ${typesName}
