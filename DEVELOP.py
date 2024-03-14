@@ -19,7 +19,6 @@ from typing import Sequence, Any
 from docopt import docopt
 from collections import defaultdict, deque
 import numpy as np
-import tensorflow as tf
 import sys, traceback
 import pdb
 import json
@@ -36,6 +35,9 @@ import os
 import time
 from data_augmentation import *
 import molgrid
+import torch
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 
 '''
 Comments provide the expected tensor shapes where helpful.
@@ -213,7 +215,7 @@ class DenseGGNNChemModel(ChemModel):
                         if self.params['use_edge_bias']:
                             self.weights['edge_biases'+scope+str(iter_idx)] = tf.Variable(np.zeros([self.num_edge_types, 1, new_h_dim]).astype(np.float32))
                 
-                        cell = tf.contrib.rnn.GRUCell(new_h_dim)
+                        cell = tf.nn.rnn_cell.GRUCell(new_h_dim)
                         cell = tf.nn.rnn_cell.DropoutWrapper(cell,
                                         state_keep_prob=self.placeholders['graph_state_keep_prob'])
                         self.weights['node_gru'+scope+str(iter_idx)] = cell
@@ -227,7 +229,7 @@ class DenseGGNNChemModel(ChemModel):
                 if self.params['use_edge_bias']:
                     self.weights['edge_biases'+scope] = tf.Variable(np.zeros([self.num_edge_types, 1, new_h_dim]).astype(np.float32))
                 with tf.variable_scope("gru_scope"+scope):
-                    cell = tf.contrib.rnn.GRUCell(new_h_dim)
+                    cell = tf.estimator.rnn.GRUCell(new_h_dim)
                     cell = tf.nn.rnn_cell.DropoutWrapper(cell,
                                                          state_keep_prob=self.placeholders['graph_state_keep_prob'])
                     self.weights['node_gru'+scope] = cell

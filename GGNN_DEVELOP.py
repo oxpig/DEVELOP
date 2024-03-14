@@ -1,7 +1,8 @@
 #!/usr/bin/env/python
 
 from typing import Tuple, List, Any, Sequence
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 import time
 import os
 import json
@@ -73,7 +74,7 @@ class ChemModel(object):
         self.valid_struct_data = self.load_structural_data(params['valid_struct_file'])
 
         # Build the actual model
-        config = tf.ConfigProto()
+        config = tf.compat.v1.ConfigProto()
         config.gpu_options.allow_growth = True
         self.graph = tf.Graph()
         self.sess = tf.Session(graph=self.graph, config=config)
